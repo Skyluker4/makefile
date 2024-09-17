@@ -28,7 +28,7 @@ LIB_NAMES :=
 LIB_FLAGS := $(addprefix -L,$(LIB_DIRS))
 
 # Flags
-ALL_FLAGS := -Wall -Wextra -Wpedantic -Wabi
+ALL_FLAGS := -Wall -Wextra -Wpedantic
 AS_FLAGS ?=
 C_FLAGS ?=
 CXX_FLAGS ?= -std=c++17
@@ -59,11 +59,13 @@ $(OBJ_DIR)/%.cpp.o: %.cpp
 # Debug
 debug:
 	ALL_FLAGS := -Og -g
+	mkdir -p $(BIN_DIR)
 	$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
 
 # Release
 release:
 	ALL_FLAGS := -O2
+	mkdir -p $(BIN_DIR)
 	$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
 
 # Remove build objects
@@ -74,6 +76,7 @@ clean:
 # Clean and build
 all:
 	$(MAKE) clean
+	mkdir -p $(BIN_DIR)
 	$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
 
 -include $(DEPS)
