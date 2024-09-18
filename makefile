@@ -2,10 +2,18 @@
 TARGET_EXEC ?= a.out
 
 # Compilers
-AS=as
-CC=gcc
-CXX=g++
-LD=ld
+AS?=as
+CC?=gcc
+CXX?=g++
+LD?=ld
+
+# Commands
+MKDIR_P ?= mkdir -p
+INSTALL_M ?= install -m 755
+
+# Default installation prefix
+PREFIX ?= /usr/local
+INSTALL_BIN_DIR ?= $(PREFIX)/bin
 
 # Directories
 SRC_DIRS ?= src
@@ -35,8 +43,12 @@ CXX_FLAGS ?= -std=c++17
 LD_FLAGS ?=
 
 # Target
-$(BIN_DIR)/$(TARGET_EXEC): $(OBJS)
+$(BIN_DIR)/$(TARGET_EXEC): $(BIN_DIR) $(OBJS)
 	$(CXX) $(ALL_FLAGS) $(LD_FLAGS) $(LIB_FLAGS) $(OBJS) $(LIB_NAMES) -o $@
+
+#Bin Folder
+$(BIN_DIR):
+	$(MKDIR_P) $(BIN_DIR)
 
 # Assembly
 $(OBJ_DIR)/%.s.o: %.s
@@ -54,18 +66,16 @@ $(OBJ_DIR)/%.cpp.o: %.cpp
 	$(CXX) $(INC_FLAGS) $(ALL_FLAGS) $(CXX_FLAGS) -c $< -o $@
 
 # Phonies
-.PHONY: clean all debug release
+.PHONY: clean all debug release install uninstall
 
 # Debug
 debug:
 	ALL_FLAGS := -Og -g
-	mkdir -p $(BIN_DIR)
 	$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
 
 # Release
 release:
 	ALL_FLAGS := -O2
-	mkdir -p $(BIN_DIR)
 	$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
 
 # Remove build objects
@@ -76,11 +86,16 @@ clean:
 # Clean and build
 all:
 	$(MAKE) clean
-	mkdir -p $(BIN_DIR)
 	$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
 
--include $(DEPS)
+# Installation
+install: $(BIN_DIR)/$(TARGET_EXEC)
+	$(MKDIR_P) $(INSTALL_BIN_DIR)
+	$(INSTALL_M) $(BIN_DIR)/$(TARGET_EXEC) $(INSTALL_BIN_DIR)
 
-# Easy commands
-MKDIR_P ?= mkdir -p
+# Uninstallation
+uninstall:
+	$(RM) -f $(INSTALL_BIN_DIR)/$(TARGET_EXEC)
+
+-include $(DEPS)
 
