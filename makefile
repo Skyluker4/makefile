@@ -41,6 +41,8 @@ AS_FLAGS ?=
 C_FLAGS ?=
 CXX_FLAGS ?= -std=c++17
 LD_FLAGS ?=
+DEBUG_FLAGS ?= -Og -g
+RELEASE_FLAGS ?= -O3
 
 # Target
 $(BIN_DIR)/$(TARGET_EXEC): $(BIN_DIR) $(OBJS)
@@ -70,12 +72,12 @@ $(OBJ_DIR)/%.cpp.o: %.cpp
 
 # Debug
 debug:
-	ALL_FLAGS := -Og -g
+	ALL_FLAGS := $(DEBUG_FLAGS)
 	$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
 
 # Release
 release:
-	ALL_FLAGS := -O2
+	ALL_FLAGS := $(RELEASE_FLAGS)
 	$(MAKE) $(BIN_DIR)/$(TARGET_EXEC)
 
 # Remove build objects
