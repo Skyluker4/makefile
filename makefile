@@ -33,7 +33,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 # Libraries
 LIB_DIRS :=
 LIB_NAMES :=
-LIB_FLAGS := $(addprefix -L,$(LIB_DIRS))
+LIB_FLAGS := $(addprefix -L,$(LIB_DIRS)) $(addprefix -l,$(LIB_NAMES))
 
 # Flags
 ALL_FLAGS := -Wall -Wextra -Wpedantic
@@ -46,8 +46,7 @@ RELEASE_FLAGS ?= -O3
 
 # Target
 $(BIN_DIR)/$(TARGET_EXEC): $(BIN_DIR) $(OBJS)
-	$(CXX) $(ALL_FLAGS) $(LD_FLAGS) $(LIB_FLAGS) $(OBJS) $(LIB_NAMES) -o $@
-
+	$(CXX) $(ALL_FLAGS) $(LD_FLAGS) $(OBJS) $(LIB_FLAGS) -o $@
 #Bin Folder
 $(BIN_DIR):
 	$(MKDIR_P) $(BIN_DIR)
@@ -100,4 +99,3 @@ uninstall:
 	$(RM) -f $(INSTALL_BIN_DIR)/$(TARGET_EXEC)
 
 -include $(DEPS)
-
