@@ -119,7 +119,6 @@ check_build_type: clean_bin_if_needed
 clean_bin_if_needed:
 	@if [ -f $(BUILD_TYPE_FILE) ]; then \
 		if [ "$$(cat $(BUILD_TYPE_FILE))" != "$(BUILD_TYPE)" ]; then \
-			echo "Switching build type, removing binary..."; \
 			$(MAKE) clean_bin; \
 		fi \
 	fi
